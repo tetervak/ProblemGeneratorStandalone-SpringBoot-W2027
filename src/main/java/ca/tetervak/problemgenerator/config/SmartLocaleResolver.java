@@ -4,12 +4,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.jspecify.annotations.NonNull;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
-import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-@SuppressWarnings("LombokSetterMayBeUsed")
 public class SmartLocaleResolver extends CookieLocaleResolver {
 
     private List<Locale> supportedLocales = Collections.singletonList(Locale.ENGLISH);
@@ -28,13 +26,9 @@ public class SmartLocaleResolver extends CookieLocaleResolver {
 
     @Override
     @NonNull
-    public Locale resolveLocale(HttpServletRequest request) {
+    public Locale resolveLocale(@NonNull HttpServletRequest request) {
         // 1. Resolve the user's intended locale (Cookie or Browser)
         Locale resolved = super.resolveLocale(request);
-        
-        if (resolved == null) {
-            return supportedLocales.getFirst();
-        }
 
         String lang = resolved.getLanguage();
         
