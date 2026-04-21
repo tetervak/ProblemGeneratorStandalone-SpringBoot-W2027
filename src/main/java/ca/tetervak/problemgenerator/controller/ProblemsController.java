@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -52,10 +53,15 @@ public class ProblemsController {
     @GetMapping("/form/confirm")
     public String problemRequestFormConfirm(
             @Valid @ModelAttribute RequestForm requestForm,
+            BindingResult bindingResult,
             Model model
     ) {
-        model.addAttribute("requestForm", requestForm);
-        return "problems/form/form-confirm";
+        if (bindingResult.hasErrors()) {
+            return "problems/form/form-index";
+        } else {
+            model.addAttribute("requestForm", requestForm);
+            return "problems/form/form-confirm";
+        }
     }
 
     @GetMapping("/categories")

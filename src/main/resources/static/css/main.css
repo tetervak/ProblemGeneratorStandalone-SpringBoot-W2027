@@ -19,6 +19,7 @@ li{
 .value{
     font-style: italic;
     margin-left: 1rem;
+    color: blueviolet;
 }
 
 .error-message{

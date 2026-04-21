@@ -26,29 +26,6 @@ public class MvcExceptionHandler {
         return mav;
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ModelAndView handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-
-        ModelAndView mav = new ModelAndView();
-        // Get the bound form object
-        Object target = ex.getBindingResult().getTarget();
-
-        if (target instanceof RequestForm) {
-            mav.setViewName("problems/form/form-index");
-            mav.addObject("requestForm", target);
-            mav.addObject("categories", AlgebraProblemCategory.getStringArray());
-            mav.addObject("levels", DifficultyLevel.getStringArray());
-        } else {
-            mav.setViewName("error/general-error");
-            mav.addObject("message", "Validation Failed");
-        }
-        // Add all errors to the model for Thymeleaf binding
-        mav.addAllObjects(ex.getBindingResult().getModel());
-
-        return mav;
-    }
-
     @ExceptionHandler(Exception.class)
     public ModelAndView handleException(Exception ex) {
         ModelAndView mav = new ModelAndView("error/general-error");
