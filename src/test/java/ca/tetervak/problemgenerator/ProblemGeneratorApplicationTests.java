@@ -9,5 +9,4 @@ class ProblemGeneratorApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }

@@ -7,6 +7,7 @@ import ca.tetervak.problemgenerator.repository.AlgebraProblemRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/problems")
+@Slf4j
 public class ProblemsController {
 
     private final AlgebraProblemRepository problemRepository;
@@ -26,15 +28,18 @@ public class ProblemsController {
             @NonNull AlgebraProblemRepository problemRepository
     ) {
         this.problemRepository = problemRepository;
+        log.trace("Problems controller created");
     }
 
     @GetMapping({"", "/"})
     public String problemsIndex() {
+        log.trace("Problems index page requested");
         return "problems/problems-index";
     }
 
     @GetMapping("/counts")
     public ModelAndView problemsCounts() {
+        log.trace("Problems counts page requested");
         ModelAndView mav = new ModelAndView("problems/problems-counts");
         CountsByCategoriesAndLevels counts = problemRepository.getAlgebraProblemCounts();
         mav.addObject("counts", counts);
@@ -46,6 +51,7 @@ public class ProblemsController {
             @ModelAttribute RequestForm requestForm,
             Model model
     ) {
+        log.trace("Problems form page requested");
         model.addAttribute("requestForm", requestForm);
         return "problems/form/form-index";
     }
@@ -56,7 +62,11 @@ public class ProblemsController {
             BindingResult bindingResult,
             Model model
     ) {
+        log.trace("Problems form confirm page requested");
+        log.debug("Request form: {}", requestForm);
         if (bindingResult.hasErrors()) {
+            log.trace("Form validation failed");
+            log.debug("Errors: {}", bindingResult.getAllErrors());
             return "problems/form/form-index";
         } else {
             model.addAttribute("requestForm", requestForm);
@@ -66,6 +76,7 @@ public class ProblemsController {
 
     @GetMapping("/categories")
     public String problemsCategories() {
+        log.trace("Problems categories page requested");
         return "problems/categories/categories-index";
     }
 
@@ -73,6 +84,8 @@ public class ProblemsController {
     public ModelAndView problemsSpecificCategory(
             @PathVariable String category
     ) {
+        log.trace("Problems specific category page requested");
+        log.debug("Category: {}", category);
         ModelAndView mav = new ModelAndView("problems/categories/specific-category");
         mav.addObject("category", category);
         CountsByLevels countsByLevels = problemRepository.getAlgebraProblemCountsByCategory(
@@ -88,6 +101,8 @@ public class ProblemsController {
             @RequestParam(defaultValue = "beginner") String level,
             @RequestParam(defaultValue = "5") int number
     ) {
+        log.trace("Problems generator page requested");
+        log.debug("Category: {}, Level: {}, Number: {}", category, level, number);
         if (number < 1 || number > 10) {
             throw new IllegalArgumentException("Number must be between 1 and 10");
         }
@@ -113,6 +128,9 @@ public class ProblemsController {
             Model model,
             HttpServletResponse response
     ) {
+        log.trace("Problems compare levels page requested");
+        log.debug("Category: {}, Number: {}", category, number);
+        log.debug("Compare form: {}", compareForm);
         if (compareForm.getNumber() >= 1 && compareForm.getNumber() <= 10) {
             if (compareForm.getNumber() != number) {
                 Cookie cookie = new Cookie(
@@ -122,6 +140,7 @@ public class ProblemsController {
                 cookie.setHttpOnly(true);
                 cookie.setAttribute("SameSite", "Strict");
                 response.addCookie(cookie);
+                log.debug("Cookie set: compare-number: {}", cookie.getValue());
             }
         } else {
             if(compareForm.getNumber() == 0) {
@@ -131,6 +150,7 @@ public class ProblemsController {
                     compareForm.setNumber(5);
                 }
             } else {
+                log.warn("Number is not between 1 and 10");
                 throw new IllegalArgumentException("Number must be between 1 and 10");
             }
         }
@@ -154,11 +174,13 @@ public class ProblemsController {
 
     @ModelAttribute("categories")
     public String[] getCategories() {
+        log.trace("Getting categories");
         return AlgebraProblemCategory.getStringArray();
     }
 
     @ModelAttribute("levels")
     public String[] getLevels() {
+        log.trace("Getting levels");
         return DifficultyLevel.getStringArray();
     }
 }
