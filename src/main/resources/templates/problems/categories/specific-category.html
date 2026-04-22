@@ -48,7 +48,7 @@
         </tbody>
     </table>
     <p>
-        <label>Total Problems:
+        <label>Total of <th:block th:text="${#strings.capitalize(category)}">Category</th:block> Problems:
             <span th:text="${countsByLevels.total}" class="value">Total Problems</span>
         </label>
     </p>
