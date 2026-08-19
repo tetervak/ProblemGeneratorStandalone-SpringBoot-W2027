@@ -35,8 +35,12 @@
         </li>
     </ul>
 </main>
-<footer th:fragment="course-footer" class="container d-flex flex-wrap justify-content-center py-3 mt-4 border-top">
-        <div>PROG27545 / Web Application Design and Implementation</div> <div>&nbsp;—&nbsp;</div> <div>Sheridan College, Alexander Tetervak</div>
+<footer th:fragment="course-footer" class="container d-flex flex-column flex-wrap align-items-center py-3 mt-4 border-top">
+    <div class="d-none d-sm-block">PROG27545 / Web Application Design and Implementation</div>
+    <div class="d-block d-sm-none">PROG27545 / Web Application Design</div>
+    <div class="d-block d-sm-none">and Implementation</div>
+    <div>Sheridan College, Alexander Tetervak</div>
+    <div th:text="${#temporals.format(#temporals.createNow(), 'MMMM dd, yyyy')}">March 15, 2023</div>
 </footer>
 </body>
 </html>
