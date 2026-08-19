@@ -36,9 +36,12 @@
     </ul>
 </main>
 <footer th:fragment="course-footer" class="container d-flex flex-column flex-wrap align-items-center py-3 mt-4 border-top">
+    <!--/* Full title – hidden on extra-small screens */-->
     <div class="d-none d-sm-block">PROG27545 / Web Application Design and Implementation</div>
+    <!--/* Split title – visible only on extra-small screens */-->
     <div class="d-block d-sm-none">PROG27545 / Web Application Design</div>
     <div class="d-block d-sm-none">and Implementation</div>
+
     <div>Sheridan College, Alexander Tetervak</div>
     <div th:text="${#temporals.format(#temporals.createNow(), 'MMMM dd, yyyy')}">March 15, 2023</div>
 </footer>
