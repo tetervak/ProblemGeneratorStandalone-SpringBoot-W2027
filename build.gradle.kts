@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "4.0.5"
+    id("org.springframework.boot") version "4.1.0"
     id("io.spring.dependency-management") version "1.1.7"
 }
 
@@ -8,15 +8,11 @@ group = "ca.tetervak"
 version = "0.0.1-SNAPSHOT"
 description = "ProblemGenerator"
 
+description = "ProblemGeneratorVerCheck"
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(25)
-    }
-}
-
-configurations {
-    compileOnly {
-        extendsFrom(configurations.annotationProcessor.get())
     }
 }
 
@@ -40,7 +36,11 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
 
     testImplementation("org.springframework.boot:spring-boot-starter-thymeleaf-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-validation-test")
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+    testCompileOnly("org.projectlombok:lombok")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testAnnotationProcessor("org.projectlombok:lombok")
 }
 
 tasks.withType<Test> {
